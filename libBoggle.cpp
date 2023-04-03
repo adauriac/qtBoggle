@@ -103,6 +103,22 @@ boggleSolver::boggleSolver(string dictSt)
 }     // FIN boggleSolver::boggleSolver(string dict)
 // ***********************************************************************
 
+boggleSolver::boggleSolver(vector<char*> dictCont)
+// flag==0 : c'est le NOM du fichier, flag=1 : c'est le contenu du fichier
+{
+  unsigned int i,k=0;
+  num_words = 0;
+  for(i=0;i<dictCont.size();i++)
+  {
+    char *buf = dictCont[i];
+    buf[strlen(buf)-1] = '\0';
+    dict[num_words++] = strdup(buf);
+  }
+  qsort(dict, num_words, sizeof(char *), my_sort);
+  status = "OK";
+}     // FIN boggleSolver::boggleSolver(char* dictCont)
+// ***********************************************************************
+
 string boggleSolver::solve(string data)
 {
   int i,j;

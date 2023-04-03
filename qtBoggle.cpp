@@ -26,7 +26,6 @@ qtBoogle::qtBoogle(QWidget *parent)
     : QMainWindow(parent)
 {
     m_prefix = ":/resources/";
-    QRandomGenerator rand;
     QGridLayout *mainLayout = new QGridLayout(parent);
     for(unsigned int i=0;i<4*4;i++)
     {
@@ -108,6 +107,7 @@ qtBoogle::~qtBoogle()
 }    // FIN qtBoogle::qtBoogle(QWidget *parent)
 // ****************************************************************************
 
+#include <QFileInfo>
 void qtBoogle::solve()
 {
     m_workProofLabel->setVisible(true);
@@ -118,8 +118,39 @@ void qtBoogle::solve()
     m_RotateCheckBox->setVisible(false);
     QString dico = m_prefix+"bigdict";
     //dico = "/home/dauriac/games/qtBoggle/qtBoggle/resources/bigdict";
-    std::string dicoStr = dico.toStdString();
-    boggleSolver* bs = new boggleSolver(dicoStr);
+    QFile F(dico);
+    if (!F.exists())
+    {
+        MSG(dico + " does not exists");
+        qApp->exit(0);
+        exit(0);
+    }
+    if (!F.open(QFile::ReadOnly))
+    {
+        MSG(dico + " pas ouvrable");
+        qApp->exit(0);
+        exit(0);
+    }
+    std::vector<char*> content;
+    for(;;)
+    {
+        char line[32];
+        F.readLine(line,32);
+        // on enleve les repetitions
+        uint nn = content.size();
+        if (nn==0)
+        {
+            content.push_back(strdup(line));
+            continue;
+        }
+        char *lll = content[nn-1];
+        if (strcmp(line,lll)!=0)
+            content.push_back(strdup(line));
+        if (F.atEnd())
+            break;
+    }
+    boggleSolver* bs = new boggleSolver(content);
+    //boggleSolver* bs = new boggleSolver(dico.toStdString());
     if (bs->status != "OK")
     {
         MSG(dico + " " + QString::fromStdString(bs->status));
@@ -245,9 +276,8 @@ void qtBoogle::play()
     } // fin for(coup=0;coup<4
     m_progBar->setValue(m_totalTimeInSec);
     m_seed = 0; // pour nouvel appel different de celui-ci
-    m_solvePushBtn->setVisible(true);
-    m_solvePushBtn->setEnabled(true);
     MSG("fini");
+    m_solvePushBtn->setVisible(true);
     m_progBar->setVisible(false);
     solve();
 }    // FIN void qtBoogle::play()

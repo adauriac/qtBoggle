@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ class boggleSolver
   char choices[MAX_WORD_LEN+1];
   
   boggleSolver(string dict);
+  boggleSolver(vector<char*> dict);
   ~boggleSolver(){};
   void try_print(char *word);
   void output(int depth);

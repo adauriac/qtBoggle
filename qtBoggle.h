@@ -35,7 +35,8 @@ public:
     qtBoogle(QWidget *parent = nullptr);
     ~qtBoogle();
 private:
-    unsigned int m_seed=0;
+    unsigned int m_totalTimeInSec=1;// ICI 60*3;
+    unsigned int m_seed=51154;
     QPushButton* m_solvePushBtn;
     QPushButton* m_altViewPushBtn;
     QPushButton* m_playPushBtn;
@@ -44,7 +45,6 @@ private:
     QLabel* m_workProofLabel;
     QCheckBox* m_RotateCheckBox;
     boggleSolver* m_bs;
-    unsigned int m_totalTimeInSec=60*3;
     std::vector<QStackedWidget*> m_lesWidg;
     std::vector<QChar> m_lesQChars;  // donc entre 'A' et 'Z' ou '_'
     std::vector<QLineEdit*> m_lesQLineEdits;
