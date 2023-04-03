@@ -1,9 +1,8 @@
 #include "qtBoggle.h"
+/*
 #include <QApplication>
 #include <QPushButton>
-#include <QGridLayout>
 #include <QStackedWidget>
-#include <QMessageBox>
 #include <QRandomGenerator>
 #include <QDebug>
 #include <QTextEdit>
@@ -20,7 +19,7 @@
 #include <QRadioButton>
 #include <QScrollBar>
 #include <QPlainTextEdit>
-
+*/
 #define MSG(msg){QMessageBox msgBox;msgBox.setText(msg);msgBox.exec();}
 
 qtBoogle::qtBoogle(QWidget *parent)
@@ -58,37 +57,31 @@ qtBoogle::qtBoogle(QWidget *parent)
         m_lesQLabels.push_back(lab);
         m_lesQLineEdits.push_back(linE);
     }
-    // ajout des boutons
-    //QPushButton *altView = new QPushButton("Plus beau");
-    //m_altView = altView;
     QPushButton *play = new QPushButton("Jouer");
     QPushButton *solve = new QPushButton("Solve");
     m_solvePushBtn = solve;
-    m_playBushBtn = play;
+    m_playPushBtn = play;
     play->setMaximumSize(60,30);
     play->setMinimumSize(70,35);
     solve->setMaximumSize(60,30);
     solve->setMinimumSize(70,35);
-    //mainLayout->addWidget(altView,0,4);
     QLabel *leg= new QLabel("vous pouvez remplir la grille ou ");
-    m_leg = leg;
+    m_legLabel = leg;
     leg->setFrameStyle(QFrame::Box);
     mainLayout->addWidget(leg,0,0,1,4);
     mainLayout->addWidget(play,0,4);
     mainLayout->addWidget(solve,1,4);
     solve->setEnabled(false);
     solve->setVisible(false);
-    //connect(altView,&QPushButton::clicked,this,&qtBoogle::altView);
     connect(play,&QPushButton::clicked,this,&qtBoogle::play);
     connect(solve,&QPushButton::clicked,this,&qtBoogle::solve);
 
     QPushButton* pbDuree = new QPushButton(QString::number(m_totalTimeInSec)+" sec.");
-    m_pbDuree = pbDuree;
+    m_DureePushBtn = pbDuree;
     connect(pbDuree,&QPushButton::clicked,this,&qtBoogle::changeDuree);
     mainLayout->addWidget(pbDuree,4,4);
     QCheckBox* chbRotate = new QCheckBox("Rotation active");
-    m_chbRotate = chbRotate;
-    //connect(chbRotate,&QCheckBox::clicked,this,&qtBoogle::tourne);
+    m_RotateCheckBox = chbRotate;
     mainLayout->addWidget(chbRotate,3,4);
 
     QProgressBar* progBar = new QProgressBar();
@@ -97,7 +90,7 @@ qtBoogle::qtBoogle(QWidget *parent)
     mainLayout->addWidget(progBar,5,0,1,4);
 
     QLabel* workProof = new QLabel("Je bosse");
-    m_workProof = workProof;
+    m_workProofLabel = workProof;
     mainLayout->addWidget(workProof,5,4);
     workProof->setStyleSheet("background-color: red");
     workProof->setVisible(false);
@@ -117,12 +110,12 @@ qtBoogle::~qtBoogle()
 
 void qtBoogle::solve()
 {
-    m_workProof->setVisible(true);
+    m_workProofLabel->setVisible(true);
     m_solvePushBtn->setVisible(false);
-    m_playBushBtn->setVisible(false);
-    m_leg->setVisible(false);
-    m_pbDuree->setVisible(false);
-    m_chbRotate->setVisible(false);
+    m_playPushBtn->setVisible(false);
+    m_legLabel->setVisible(false);
+    m_DureePushBtn->setVisible(false);
+    m_RotateCheckBox->setVisible(false);
     QString dico = m_prefix+"bigdict";
     dico = "/home/dauriac/games/qtBoggle/qtBoggle/resources/bigdict";
     std::string dicoStr = dico.toStdString();
@@ -145,7 +138,7 @@ void qtBoogle::solve()
     connect(showAns,&MyPlainTextEdit::Closing,this,&qtBoogle::clearPlateau);
     showAns->show();
     m_progBar->reset();
-    m_workProof->setVisible(false);
+    m_workProofLabel->setVisible(false);
 }    // FIN qtBoogle::solve()
 // ****************************************************************************
 
@@ -158,17 +151,17 @@ void qtBoogle::clearPlateau()
         m_lesWidg[i]->setCurrentIndex(0);
     }
     m_solvePushBtn->setVisible(true);
-    m_playBushBtn->setVisible(true);
-    m_leg->setVisible(true);
-    m_pbDuree->setVisible(true);
-    m_chbRotate->setVisible(true);
+    m_playPushBtn->setVisible(true);
+    m_legLabel->setVisible(true);
+    m_DureePushBtn->setVisible(true);
+    m_RotateCheckBox->setVisible(true);
 }    // void qtBoogle::clearPlateau()
 // ****************************************************************************
 
 void qtBoogle::play()
 {
     // le temps est totale est m_totalTimeInSec
-    bool tourne = m_chbRotate->isChecked();
+    bool tourne = m_RotateCheckBox->isChecked();
     m_solvePushBtn->setVisible(false);
     if (m_seed==0)  // si seed==0 on prend le nb de milliseconds depuis the epoch
     {
@@ -281,7 +274,7 @@ void qtBoogle::altView()
     }
     else
     {
-        m_altView->setText("Plus beau");
+        m_altViewPushBtn->setText("Plus beau");
         for(uint k =0;k<4*4;k++)
         {
 
@@ -365,7 +358,7 @@ void qtBoogle::changeDuree()
     bool ok;
     int i = QInputDialog::getInt(this,"","duree en secondes:", 180, 1, 60*100, 1, &ok);
     m_totalTimeInSec = i;
-    m_pbDuree->setText(QString::number(m_totalTimeInSec)+" sec.");
+    m_DureePushBtn->setText(QString::number(m_totalTimeInSec)+" sec.");
 }    // void qtBoogle::changeDuree()
 // ****************************************************************************************
 
@@ -388,81 +381,5 @@ void qtBoogle::QRandomPerm(std::vector<uint> &P,uint seed)
 }    // FIN void QRandomPerm(std::vector<uint> &P)
 // ****************************************************************************************
 
-MyQStackedWidget::MyQStackedWidget(QWidget *parent) :
-    QStackedWidget(parent)
-{
-    setAttribute(Qt::WA_Hover);
-    //fprintf(stderr,"Createur Stacked\n");
-}    // FIN MyQStackedWidget::MyQStackedWidget(QWidget *parent) :
-// ****************************************************************************************
-
-bool MyQStackedWidget::event(QEvent* e)
-{
-    switch(e->type())
-    {
-    case QEvent::HoverEnter:
-        hoverEnter(static_cast<QHoverEvent*>(e));
-        return true;
-    case QEvent::HoverLeave:
-        hoverLeave(static_cast<QHoverEvent*>(e));
-        return true;
-    default:
-        break;
-    }
-    return QWidget::event(e);
-}    // FIN
-// ****************************************************************************
-
-void MyQStackedWidget::enterEvent(QEvent* e)
-{
-    //fprintf(stderr,"enterEvent MyQStackedWidget\n");
-}    // FIN void MyQStackedWidget::enterEvent(QEvent* e)
-// ****************************************************************************
-
-void MyQStackedWidget::leaveEvent(QEvent* e)
-{
-    //fprintf(stderr,"leaveEvent MyQStackedWidget\n");
-}    // FIN void MyQStackedWidget::leaveEvent(QEvent* e)
-// ****************************************************************************
-
-void MyQStackedWidget::hoverEnter(QHoverEvent* event)
-{
-    //fprintf(stderr,"hoverEnter MyQStackedWidget\n");
-    if (m_active)
-    {
-        m_active = false;
-        this->setCurrentIndex(1); // active le textEdit
-        //int i = (this->currentIndex()+1)%2;
-        //this->setCurrentIndex(i);
-    }
-    m_active = true;
-}    // FIN void MyQStackedWidget::hoverEnter(QHoverEvent* event)
-// ****************************************************************************
-
-void MyQStackedWidget::hoverLeave(QHoverEvent* event)
-{
-    if (m_active)
-    {
-        m_active = false;
-        this->setCurrentIndex(0); // active the label
-        //int i = (this->currentIndex()+1)%2;
-        //this->setCurrentIndex(i);
-    }
-    m_active = true;
-}    // FIN void MyQStackedWidget::hoverEnter(QHoverEvent* event)
-// ****************************************************************************
-
-void Worker::process()
-{ // Process. Start processing data.
-    // fait blinker le radio button
-    while (true)
-    {
-        m_qrb->setVisible(true);
-        //QTest::qWait(250);
-        m_qrb->setVisible(false);
-    }
-//    emit finished();
-}    // FIN void void Worker::process()
-// ****************************************************************************
 
 

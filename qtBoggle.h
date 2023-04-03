@@ -1,21 +1,30 @@
 #ifndef QTBOOGLE_H
 #define QTBOOGLE_H
 
-#include <QStackedWidget>
-#include <QMainWindow>
-#include <QLabel>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QPushButton>
-#include <QRandomGenerator>
-#include <QHoverEvent>
-#include <QEvent>
+#include <QApplication>
 #include <QCheckBox>
 #include <QDebug>
-#include <stdio.h>
-#include <QProgressBar>
-#include <QRadioButton>
+#include <QElapsedTimer>
+#include <QEvent>
+#include <QFile>
+#include <QGridLayout>
+#include <QInputDialog>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMainWindow>
+#include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QProgressBar>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QRandomGenerator>
+#include <QStackedWidget>
+#include <QTextBrowser>
+#include <QTime>
+#include <QTimer>
+#include <random>
+
+
 #include "libBoggle.h"
 
 class qtBoogle : public QMainWindow
@@ -26,25 +35,15 @@ public:
     qtBoogle(QWidget *parent = nullptr);
     ~qtBoogle();
 private:
-    void altView();
-    void entreeChangee(uint i);
-    void play();
-    void solve();
-    void changeDuree();
-    void tourne();
-    QString imageFileName(uint i);
-    QString imageFileName(QChar c);
-    uint numero(QString);
-    void QRandomPerm(std::vector<uint> &P,uint seed);
     uint m_seed=0;
     QPushButton* m_solvePushBtn;
-    QPushButton* m_altView;
-    QPushButton* m_playBushBtn;
+    QPushButton* m_altViewPushBtn;
+    QPushButton* m_playPushBtn;
+    QPushButton* m_DureePushBtn;
+    QLabel* m_legLabel;
+    QLabel* m_workProofLabel;
+    QCheckBox* m_RotateCheckBox;
     boggleSolver* m_bs;
-    QLabel* m_leg;
-    QLabel* m_workProof;
-    QPushButton* m_pbDuree;
-    QCheckBox* m_chbRotate;
     uint m_totalTimeInSec=60*3;
     std::vector<QStackedWidget*> m_lesWidg;
     std::vector<QChar> m_lesQChars;  // donc entre 'A' et 'Z' ou '_'
@@ -54,7 +53,6 @@ private:
     std::vector<QChar> m_Orient = {QChar('0'),QChar('1'),QChar('2'),QChar('3')};
     QProgressBar* m_progBar;
     QRandomGenerator* m_R;
-    void clearPlateau();
     std::vector<QString> m_Lettres = {
         "NIGETV",
         "NDOEST",
@@ -73,46 +71,22 @@ private:
         "YLGNUE",
         "HESINR"
        };
+
+    //                                            METHODES
+    void altView();
+    void entreeChangee(uint i);
+    void play();
+    void solve();
+    void changeDuree();
+    void tourne();
+    QString imageFileName(uint i);
+    QString imageFileName(QChar c);
+    uint numero(QString);
+    void QRandomPerm(std::vector<uint> &P,uint seed);
+    void clearPlateau();
 };
 
-class MyQStackedWidget : public QStackedWidget
-{
-    Q_OBJECT
-public:
-    explicit MyQStackedWidget(QWidget *parent = 0);
-
-protected:
-    void enterEvent(QEvent *);
-    void leaveEvent(QEvent *);
-    bool event(QEvent * e);
-
-    void hoverEnter(QHoverEvent * event);
-    void hoverLeave(QHoverEvent * event);
-
-signals:
-
-public slots:
-
-private:
-    bool m_active;
-};
-
-class Worker : public QObject {
-    Q_OBJECT
-public:
-    Worker(QLabel* qrb){m_qrb=qrb;};
-    ~Worker(){};
-public slots:
-    void process();
-signals:
-//    void finished();
- //   void error(QString err);
-private:
-    // add your variables here
-    QLabel* m_qrb;
-};
-
-class MyPlainTextEdit : public QPlainTextEdit
+class MyPlainTextEdit : public QPlainTextEdit  // ajout du signal Closing quand on ferme
 {
     Q_OBJECT
 public:
@@ -127,4 +101,5 @@ protected:
         QPlainTextEdit::closeEvent(event);
     }
 };
+
 #endif // QTBOOGLE_H

@@ -23,7 +23,8 @@ class boggleSolver
   char *dict[DICT_SIZE];
   char *found[FOUND_SIZE];
 
-  int valeur[17] = {0,0,0,1,2,3,5,7,9,11,13,15,17,19,21,23,1000};
+  // nb lettres     0 1 2 3 4 5 6 7 8  9  10 11 12 13 14 15
+  int valeur[17] = {0,0,0,1,1,2,3,5,11,11,11,11,11,11,11,11,1000};
   int num_words, num_found = 0;
   string status;
   char letters[BOX_SIZE][BOX_SIZE];
