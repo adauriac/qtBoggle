@@ -99,6 +99,7 @@ qtBoogle::qtBoogle(QWidget *parent)
     w->setLayout(mainLayout);
     w->setWindowTitle("BOGGLE");
     w->show();
+
 }    // FIN qtBoogle::qtBoogle(QWidget *parent)
 // ****************************************************************************
 
@@ -131,26 +132,27 @@ void qtBoogle::solve()
         qApp->exit(0);
         exit(0);
     }
-    std::vector<char*> content;
-    for(;;)
+    if (m_dicoContent.size()==0)
     {
-        char line[32];
-        F.readLine(line,32);
-        // on enleve les repetitions
-        uint nn = content.size();
-        if (nn==0)
+      for(;;)
         {
-            content.push_back(strdup(line));
-            continue;
+            char line[32];
+            F.readLine(line,32);
+            // on enleve les repetitions
+            uint nn = m_dicoContent.size();
+            if (nn==0)
+            {
+                m_dicoContent.push_back(strdup(line));
+                continue;
+            }
+            char *lll = m_dicoContent[nn-1];
+            if (strcmp(line,lll)!=0)
+                m_dicoContent.push_back(strdup(line));
+            if (F.atEnd())
+                break;
         }
-        char *lll = content[nn-1];
-        if (strcmp(line,lll)!=0)
-            content.push_back(strdup(line));
-        if (F.atEnd())
-            break;
     }
-    boggleSolver* bs = new boggleSolver(content);
-    //boggleSolver* bs = new boggleSolver(dico.toStdString());
+    boggleSolver* bs = new boggleSolver(m_dicoContent);
     if (bs->status != "OK")
     {
         MSG(dico + " " + QString::fromStdString(bs->status));
@@ -181,7 +183,8 @@ void qtBoogle::clearPlateau()
         m_lesQLineEdits[i]->setText("");
         m_lesWidg[i]->setCurrentIndex(0);
     }
-    m_solvePushBtn->setVisible(true);
+ //   m_solvePushBtn->setVisible(true);
+    m_solvePushBtn->setText("solve");
     m_playPushBtn->setVisible(true);
     m_legLabel->setVisible(true);
     m_DureePushBtn->setVisible(true);
@@ -194,7 +197,8 @@ void qtBoogle::play()
     // le temps est totale est m_totalTimeInSec
     bool tourne = m_RotateCheckBox->isChecked();
     m_RotateCheckBox->setVisible(false);
-    m_solvePushBtn->setVisible(false);
+   // m_solvePushBtn->setVisible(false);
+    m_solvePushBtn->setText("     ");
     m_legLabel->setVisible(false);
     m_playPushBtn->setVisible(false);
     m_DureePushBtn->setVisible(false);
