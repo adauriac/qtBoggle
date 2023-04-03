@@ -117,7 +117,7 @@ void qtBoogle::solve()
     m_DureePushBtn->setVisible(false);
     m_RotateCheckBox->setVisible(false);
     QString dico = m_prefix+"bigdict";
-    dico = "/home/dauriac/games/qtBoggle/qtBoggle/resources/bigdict";
+    //dico = "/home/dauriac/games/qtBoggle/qtBoggle/resources/bigdict";
     std::string dicoStr = dico.toStdString();
     boggleSolver* bs = new boggleSolver(dicoStr);
     if (bs->status != "OK")
@@ -162,7 +162,11 @@ void qtBoogle::play()
 {
     // le temps est totale est m_totalTimeInSec
     bool tourne = m_RotateCheckBox->isChecked();
+    m_RotateCheckBox->setVisible(false);
     m_solvePushBtn->setVisible(false);
+    m_legLabel->setVisible(false);
+    m_playPushBtn->setVisible(false);
+    m_DureePushBtn->setVisible(false);
     if (m_seed==0)  // si seed==0 on prend le nb de milliseconds depuis the epoch
     {
         QElapsedTimer el;
