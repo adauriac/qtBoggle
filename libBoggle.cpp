@@ -76,7 +76,7 @@ void boggleSolver::dfs(int x, int y, int depth)
 
 boggleSolver::boggleSolver(string dictSt)
 {
-  uint i;
+  unsigned int i;
   char buf[128];
   FILE *f;
   num_words = 0;
@@ -128,7 +128,7 @@ string boggleSolver::solve(string data)
   qsort( found, num_found, sizeof(char *), st_sort_bylen);
 
   for( i=0;i< num_found;i++)
-    if (strlen(found[i])>=(uint) len_min_affiche)
+    if (strlen(found[i])>=(unsigned int) len_min_affiche)
       break;
   int z = 0;
   string ans = "";

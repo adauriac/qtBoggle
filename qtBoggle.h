@@ -35,7 +35,7 @@ public:
     qtBoogle(QWidget *parent = nullptr);
     ~qtBoogle();
 private:
-    uint m_seed=0;
+    unsigned int m_seed=0;
     QPushButton* m_solvePushBtn;
     QPushButton* m_altViewPushBtn;
     QPushButton* m_playPushBtn;
@@ -44,7 +44,7 @@ private:
     QLabel* m_workProofLabel;
     QCheckBox* m_RotateCheckBox;
     boggleSolver* m_bs;
-    uint m_totalTimeInSec=60*3;
+    unsigned int m_totalTimeInSec=60*3;
     std::vector<QStackedWidget*> m_lesWidg;
     std::vector<QChar> m_lesQChars;  // donc entre 'A' et 'Z' ou '_'
     std::vector<QLineEdit*> m_lesQLineEdits;
@@ -74,15 +74,15 @@ private:
 
     //                                            METHODES
     void altView();
-    void entreeChangee(uint i);
+    void entreeChangee(unsigned int i);
     void play();
     void solve();
     void changeDuree();
     void tourne();
-    QString imageFileName(uint i);
+    QString imageFileName(unsigned int i);
     QString imageFileName(QChar c);
-    uint numero(QString);
-    void QRandomPerm(std::vector<uint> &P,uint seed);
+    unsigned int numero(QString);
+    void QRandomPerm(std::vector<unsigned int> &P,unsigned int seed);
     void clearPlateau();
 };
 

@@ -28,7 +28,7 @@ qtBoogle::qtBoogle(QWidget *parent)
     m_prefix = ":/resources/";
     QRandomGenerator rand;
     QGridLayout *mainLayout = new QGridLayout(parent);
-    for(uint i=0;i<4*4;i++)
+    for(unsigned int i=0;i<4*4;i++)
     {
         QStackedWidget *aux = new QStackedWidget;
         //MyQStackedWidget* aux = new MyQStackedWidget;
@@ -41,7 +41,7 @@ qtBoogle::qtBoogle(QWidget *parent)
         aux->setMinimumSize(51,51);
         aux->setMaximumSize(51,51);
         // configuration du label (en fait l'image)
-        //uint k = rand.bounded(26);
+        //unsigned int k = rand.bounded(26);
         lab->setStyleSheet("background-image: url('/"+imageFileName('_')+"')");
         lab->resize(51,51);
         // configuration du lineedit
@@ -128,7 +128,7 @@ void qtBoogle::solve()
     }
     m_bs = bs;
     QString data = "";
-    for(uint i=0;i<4*4;i++)
+    for(unsigned int i=0;i<4*4;i++)
         data += m_lesQChars[i];
     std::string dataStr = data.toStdString();
     std::string ans = bs->solve(dataStr);   // ICI ON RESOUD
@@ -144,7 +144,7 @@ void qtBoogle::solve()
 
 void qtBoogle::clearPlateau()
 {
-    for(uint i=0;i<4*4;i++)
+    for(unsigned int i=0;i<4*4;i++)
     {
         m_lesQChars[i]='_';
         m_lesQLineEdits[i]->setText("");
@@ -167,32 +167,32 @@ void qtBoogle::play()
     {
         QElapsedTimer el;
         qint64 q = el.elapsed();
-        m_seed = (uint)q;
+        m_seed = (unsigned int)q;
     }
     QRandomGenerator R(m_seed);
     m_R = &R;
-    std::vector<uint> P={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-    for (uint i= P.size()-1;i!=1;i--)
+    std::vector<unsigned int> P={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+    for (unsigned int i= P.size()-1;i!=1;i--)
     {
-       uint j = R.bounded(i); // aleatoire 0<=j<i
-       uint aux = P[i];
+       unsigned int j = R.bounded(i); // aleatoire 0<=j<i
+       unsigned int aux = P[i];
        P[i] = P[j];
        P[j]= aux;
     }
-    for(uint i=0;i<4*4;i++)
+    for(unsigned int i=0;i<4*4;i++)
     {
         QString leDe = m_Lettres[P[i]];   // choix du de de la case i
-        uint face = R.bounded(6);  // parmi les 6 face (pas exactement juste car 6 n'est pas 2**k)
+        unsigned int face = R.bounded(6);  // parmi les 6 face (pas exactement juste car 6 n'est pas 2**k)
         QChar lettre =  leDe[face]; // lettre elle meme
         m_lesQChars[i] = lettre;
     }
     // affichage des caracteres visibles avec orientation
-    std::vector<uint> orients(4*4);
-    for(uint i=0;i<4*4;i++)
+    std::vector<unsigned int> orients(4*4);
+    for(unsigned int i=0;i<4*4;i++)
         orients[i] = R.bounded(4);
     QProgressBar qpb;
-    std::vector<uint> permRot,permRot2; // Pour vaire le qart de tour
-    for(uint i=0;i<4*4;i++)
+    std::vector<unsigned int> permRot,permRot2; // Pour vaire le qart de tour
+    for(unsigned int i=0;i<4*4;i++)
     {
         permRot.push_back(i);
         permRot2.push_back(i);
@@ -201,14 +201,14 @@ void qtBoogle::play()
     m_progBar->setVisible(true);
     m_progBar->setRange(0,m_totalTimeInSec);
     m_progBar->reset();
-    //for (uint coup = 0;coup < 4; coup++)
+    //for (unsigned int coup = 0;coup < 4; coup++)
     QElapsedTimer timer;
     timer.start();
-    for (uint tic = 0;tic < m_totalTimeInSec; tic++)
+    for (unsigned int tic = 0;tic < m_totalTimeInSec; tic++)
     {
         m_progBar->setValue(tic);
-        uint coup = (4*tic)/m_totalTimeInSec;  // 0, 1 2 ou 3 suivant le quart de coups ou l'on est
-        for(uint i=0;i<4*4;i++)
+        unsigned int coup = (4*tic)/m_totalTimeInSec;  // 0, 1 2 ou 3 suivant le quart de coups ou l'on est
+        for(unsigned int i=0;i<4*4;i++)
         {
             QChar Orient = tourne ?  m_Orient[(orients[i]+coup)%4] : m_Orient[orients[i]];
             QString fileName = tourne ? m_prefix + m_lesQChars[permRot[i]] + Orient + ".png": m_prefix + m_lesQChars[i] + Orient + ".png";
@@ -233,9 +233,9 @@ void qtBoogle::play()
         if ((4*(tic+1))/m_totalTimeInSec != coup) // repermutation
         {
             // permutation corespondant a la rotation (on pourrait faire mieux)
-            for(uint i=0;i<4*4;i++)
+            for(unsigned int i=0;i<4*4;i++)
                 permRot2[i] = ROTE(permRot[i]);
-            for(uint i=0;i<4*4;i++)
+            for(unsigned int i=0;i<4*4;i++)
                 permRot[i] = permRot2[i];
         } // fin repermutation
     } // fin for(coup=0;coup<4
@@ -255,7 +255,7 @@ void qtBoogle::altView()
     {
         // on est lineEdit et on passera label (photo)
         //m_altView->setText("Editable");
-        for(uint k =0;k<4*4;k++)
+        for(unsigned int k =0;k<4*4;k++)
         {
             QChar Orient = m_Orient[0]; // orientation normal
             QString fileName = m_prefix + m_lesQChars[k] + Orient + ".png";
@@ -275,7 +275,7 @@ void qtBoogle::altView()
     else
     {
         m_altViewPushBtn->setText("Plus beau");
-        for(uint k =0;k<4*4;k++)
+        for(unsigned int k =0;k<4*4;k++)
         {
 
             m_lesWidg[k]->setCurrentIndex(0);
@@ -284,7 +284,7 @@ void qtBoogle::altView()
 }    // FIN void qtBoogle::altView()
 // ****************************************************************************************
 
-void qtBoogle::entreeChangee(uint i)
+void qtBoogle::entreeChangee(unsigned int i)
 {
    QChar newChar = m_lesQLineEdits[i]->text()[0];
    if (newChar.unicode()==0)
@@ -310,22 +310,22 @@ void qtBoogle::entreeChangee(uint i)
    m_lesQLineEdits[i]->setText(newChar);
    if (i!=4*4-1)
        m_lesQLineEdits[i+1]->setFocus();
-   for(uint i=0;i<4*4;i++) // peut-on ebabler solve
+   for(unsigned int i=0;i<4*4;i++) // peut-on ebabler solve
        if (!(('A'<=m_lesQChars[i]) && (m_lesQChars[i]<='Z')))
            return; // il manque une lettre
    // ici on enable
     m_solvePushBtn->setEnabled(true);
     m_solvePushBtn->setVisible(true);
     altView();
-}    // FIN void qtBoogle::entreeChangee(uint i)
+}    // FIN void qtBoogle::entreeChangee(unsigned int i)
 // ****************************************************************************************
 
-QString qtBoogle::imageFileName(uint i)
+QString qtBoogle::imageFileName(unsigned int i)
 {
     if (i>=26)
         return "";
     return m_prefix+QChar(65+i)+".png";
-}    // FIN QString qtBoogle::imageFileName(uint i)
+}    // FIN QString qtBoogle::imageFileName(unsigned int i)
 // ****************************************************************************************
 
 void qtBoogle::tourne()
@@ -340,7 +340,7 @@ QString qtBoogle::imageFileName(QChar c)
 }    // FIN QString qtBoogle::imageFileName(QChar c)
 // ****************************************************************************************
 
-uint qtBoogle::numero(QString name)
+unsigned int qtBoogle::numero(QString name)
 {
     if (!name.contains(m_prefix))
         return -1;
@@ -348,9 +348,9 @@ uint qtBoogle::numero(QString name)
         return -1;
     QString aux  = name.replace(m_prefix,"");
     QChar c = aux[0];
-    uint ans = c.digitValue();
+    unsigned int ans = c.digitValue();
     return ans;
-}    //FIN uint qtBoogle::numero(QString name)
+}    //FIN unsigned int qtBoogle::numero(QString name)
 // ****************************************************************************************
 
 void qtBoogle::changeDuree()
@@ -362,23 +362,23 @@ void qtBoogle::changeDuree()
 }    // void qtBoogle::changeDuree()
 // ****************************************************************************************
 
-void qtBoogle::QRandomPerm(std::vector<uint> &P,uint seed)
+void qtBoogle::QRandomPerm(std::vector<unsigned int> &P,unsigned int seed)
 {
     if (seed==0)
     {
         QElapsedTimer el;
         qint64 q = el.elapsed();
-        seed = (uint)q;
+        seed = (unsigned int)q;
     }
     QRandomGenerator R(seed);
-    for (uint i= P.size()-1;i!=1;i--)
+    for (unsigned int i= P.size()-1;i!=1;i--)
     {
-       uint j = R.bounded(i); // aleatoire 0<=j<i
-       uint aux = P[i];
+       unsigned int j = R.bounded(i); // aleatoire 0<=j<i
+       unsigned int aux = P[i];
        P[i] = P[j];
        P[j]= aux;
     }
-}    // FIN void QRandomPerm(std::vector<uint> &P)
+}    // FIN void QRandomPerm(std::vector<unsigned int> &P)
 // ****************************************************************************************
 
 
