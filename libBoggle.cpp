@@ -106,7 +106,7 @@ boggleSolver::boggleSolver(string dictSt)
 boggleSolver::boggleSolver(vector<char*> dictCont)
 // flag==0 : c'est le NOM du fichier, flag=1 : c'est le contenu du fichier
 {
-  unsigned int i,k=0;
+  unsigned int i;
   num_words = 0;
   for(i=0;i<dictCont.size();i++)
   {
