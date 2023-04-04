@@ -79,6 +79,7 @@ qtBoogle::qtBoogle(QWidget *parent)
     m_DureePushBtn = pbDuree;
     connect(pbDuree,&QPushButton::clicked,this,&qtBoogle::changeDuree);
     mainLayout->addWidget(pbDuree,4,4);
+    mainLayout->setColumnMinimumWidth(4, 120);  // Pour ne pas tout changer la mise en page qd les boutons non visibles
     QCheckBox* chbRotate = new QCheckBox("Rotation active");
     m_RotateCheckBox = chbRotate;
     mainLayout->addWidget(chbRotate,3,4);
@@ -88,16 +89,12 @@ qtBoogle::qtBoogle(QWidget *parent)
     progBar->setVisible(false);
     mainLayout->addWidget(progBar,5,0,1,4);
 
-    QLabel* workProof = new QLabel("Je bosse");
-    m_workProofLabel = workProof;
-    mainLayout->addWidget(workProof,5,4);
-    workProof->setStyleSheet("background-color: red");
-    workProof->setVisible(false);
-
     QWidget *w = new QWidget();
     // Set the outer layout as a main layout of the widget
     w->setLayout(mainLayout);
     w->setWindowTitle("BOGGLE");
+    w->setMinimumSize(QSize(m_l,m_L));
+    w->setMaximumSize(QSize(m_l,m_L));
     w->show();
 
 }    // FIN qtBoogle::qtBoogle(QWidget *parent)
@@ -108,10 +105,8 @@ qtBoogle::~qtBoogle()
 }    // FIN qtBoogle::qtBoogle(QWidget *parent)
 // ****************************************************************************
 
-#include <QFileInfo>
 void qtBoogle::solve()
 {
-    m_workProofLabel->setVisible(true);
     m_solvePushBtn->setVisible(false);
     m_playPushBtn->setVisible(false);
     m_legLabel->setVisible(false);
@@ -167,11 +162,11 @@ void qtBoogle::solve()
     std::string ans = bs->solve(dataStr);   // ICI ON RESOUD
     QString qAns(ans.c_str());
     MyPlainTextEdit* showAns = new MyPlainTextEdit();
+    showAns->setReadOnly(true);
     showAns->setPlainText(qAns);
     connect(showAns,&MyPlainTextEdit::Closing,this,&qtBoogle::clearPlateau);
     showAns->show();
     m_progBar->reset();
-    m_workProofLabel->setVisible(false);
 }    // FIN qtBoogle::solve()
 // ****************************************************************************
 
@@ -197,8 +192,7 @@ void qtBoogle::play()
     // le temps est totale est m_totalTimeInSec
     bool tourne = m_RotateCheckBox->isChecked();
     m_RotateCheckBox->setVisible(false);
-   // m_solvePushBtn->setVisible(false);
-    m_solvePushBtn->setText("     ");
+    m_solvePushBtn->setVisible(false);
     m_legLabel->setVisible(false);
     m_playPushBtn->setVisible(false);
     m_DureePushBtn->setVisible(false);
@@ -280,7 +274,7 @@ void qtBoogle::play()
     } // fin for(coup=0;coup<4
     m_progBar->setValue(m_totalTimeInSec);
     m_seed = 0; // pour nouvel appel different de celui-ci
-    MSG("fini");
+    MSG("Fini ! \nClique OK et laisse moi quelques secondes de réflexion");
     m_solvePushBtn->setVisible(true);
     m_progBar->setVisible(false);
     solve();

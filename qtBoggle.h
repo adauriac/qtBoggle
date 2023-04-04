@@ -35,7 +35,9 @@ public:
     qtBoogle(QWidget *parent = nullptr);
     ~qtBoogle();
 private:
-    unsigned int m_totalTimeInSec = 60*3;
+    unsigned int m_l=370;  // dimension de la fenetre
+    unsigned int m_L=280;  // dimension de la fenetre
+    unsigned int m_totalTimeInSec = 60*3;  // dure du jeu
     unsigned int m_seed = 0;
     QPushButton* m_solvePushBtn;
     QPushButton* m_altViewPushBtn;
