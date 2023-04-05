@@ -132,6 +132,13 @@ void qtBoogle::solve()
         {
             char line[32];
             F.readLine(line,32);
+            if (line[strlen(line)-1]=='\r') // cas macOS
+                line[strlen(line)-1]='\n';
+            if (line[strlen(line)-2]=='\r') // cas Windows
+            {
+                line[strlen(line)-2]='\n';
+                line[strlen(line)-1]=0;
+            }
             // on enleve les repetitions
             uint nn = m_dicoContent.size();
             if (nn==0)
