@@ -113,7 +113,6 @@ void qtBoogle::solve()
     m_DureePushBtn->setVisible(false);
     m_RotateCheckBox->setVisible(false);
     QString dico = m_prefix+"bigdict";
-    //dico = "/home/dauriac/games/qtBoggle/qtBoggle/resources/bigdict";
     QFile F(dico);
     if (!F.exists())
     {

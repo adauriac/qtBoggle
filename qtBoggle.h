@@ -38,7 +38,7 @@ private:
     unsigned int m_l=370;  // dimension de la fenetre
     unsigned int m_L=280;  // dimension de la fenetre
     unsigned int m_totalTimeInSec = 60*3;  // dure du jeu
-    unsigned int m_seed = 0;
+    unsigned int m_seed = 0; //51154;
     QPushButton* m_solvePushBtn;
     QPushButton* m_altViewPushBtn;
     QPushButton* m_playPushBtn;
