@@ -92,7 +92,7 @@ qtBoogle::qtBoogle(QWidget *parent)
     QWidget *w = new QWidget();
     // Set the outer layout as a main layout of the widget
     w->setLayout(mainLayout);
-    w->setWindowTitle("BOGGLE");
+    w->setWindowTitle("BOGGLE (qt "+ QString(qVersion())+")");
     w->setMinimumSize(QSize(m_l,m_L));
     w->setMaximumSize(QSize(m_l,m_L));
     w->show();
