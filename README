@@ -1,0 +1,4 @@
+qmake qBoggle.pro
+make
+
+bien-sur ça ne marchera pas ...
