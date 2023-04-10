@@ -284,6 +284,7 @@ void qtBoogle::play()
     m_solvePushBtn->setVisible(true);
     m_progBar->setVisible(false);
     solve();
+    m_legLabel->setVisible(true);
 }    // FIN void qtBoogle::play()
 // ********************************************************************************************
 
@@ -351,9 +352,13 @@ void qtBoogle::entreeChangee(unsigned int i)
    for(unsigned int i=0;i<4*4;i++) // peut-on ebabler solve
        if (!(('A'<=m_lesQChars[i]) && (m_lesQChars[i]<='Z')))
            return; // il manque une lettre
-   // ici on enable
-    m_solvePushBtn->setEnabled(true);
+   // ici on enable car la grille a ete completement remplie
+    m_playPushBtn->setVisible(false);
     m_solvePushBtn->setVisible(true);
+    m_solvePushBtn->setEnabled(true);
+    m_RotateCheckBox->setVisible(false);
+    m_DureePushBtn->setVisible(false);
+    m_legLabel->setVisible(false);
     altView();
 }    // FIN void qtBoogle::entreeChangee(unsigned int i)
 // ****************************************************************************************
